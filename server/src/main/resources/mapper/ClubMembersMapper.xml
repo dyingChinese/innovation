@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.wsyu.mapper.ClubMembersMapper">
+
+    <resultMap id="BaseResultMap" type="edu.wsyu.entity.dto.ClubMembers">
+            <id property="cmid" column="cmid" jdbcType="BIGINT"/>
+            <result property="clid" column="clid" jdbcType="BIGINT"/>
+            <result property="sid" column="sid" jdbcType="BIGINT"/>
+            <result property="role" column="role" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="joinDate" column="join_date" jdbcType="TIMESTAMP"/>
+            <result property="endDate" column="end_date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        cmid,clid,sid,
+        role,status,join_date,
+        end_date
+    </sql>
+</mapper>

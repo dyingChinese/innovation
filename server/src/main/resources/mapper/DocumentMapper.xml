@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.wsyu.mapper.DocumentMapper">
+
+    <resultMap id="BaseResultMap" type="edu.wsyu.entity.dto.Document">
+            <id property="did" column="did" jdbcType="BIGINT"/>
+            <result property="uid" column="uid" jdbcType="BIGINT"/>
+            <result property="cid" column="cid" jdbcType="BIGINT"/>
+            <result property="tid" column="tid" jdbcType="BIGINT"/>
+            <result property="crid" column="crid" jdbcType="BIGINT"/>
+            <result property="fileName" column="file_name" jdbcType="VARCHAR"/>
+            <result property="filePath" column="file_path" jdbcType="VARCHAR"/>
+            <result property="fileType" column="file_type" jdbcType="VARCHAR"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+            <result property="fileSize" column="file_size" jdbcType="BIGINT"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="createAt" column="create_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        did,uid,cid,
+        tid,crid,file_name,
+        file_path,file_type,description,
+        file_size,status,create_at
+    </sql>
+</mapper>

@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: server
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/innovation?characterEncoding=utf8
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    stat-view-servlet:
+      enabled: true
+      url-pattern: /druid/*
+      allow: "*"
+      login-username: admin
+      login-password: 123456
+      reset-enable: true
+
+  security:
+    jwt:
+      expire: 604800
+#    user:
+#      name: admin
+#      password: 123456
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+      base-path: /actuator
+
+
+logging:
+  level:
+    web: info
+    root: error
+    sql: debug
+  file:
+    path: logs
+  pattern:
+    file: logs/app-%d{yyyy-MM-dd}-%i.log.gz
+  logback:
+    rolling policy:
+      max-history: 30
+      max-file-size: 20MB
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml

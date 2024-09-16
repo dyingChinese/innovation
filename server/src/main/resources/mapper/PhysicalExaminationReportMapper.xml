@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.wsyu.mapper.PhysicalExaminationReportMapper">
+
+    <resultMap id="BaseResultMap" type="edu.wsyu.entity.dto.PhysicalExaminationReport">
+            <id property="reportId" column="report_id" jdbcType="BIGINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="gender" column="gender" jdbcType="CHAR"/>
+            <result property="age" column="age" jdbcType="INTEGER"/>
+            <result property="idCard" column="id_card" jdbcType="VARCHAR"/>
+            <result property="phone" column="phone" jdbcType="VARCHAR"/>
+            <result property="address" column="address" jdbcType="VARCHAR"/>
+            <result property="workPlace" column="work_place" jdbcType="VARCHAR"/>
+            <result property="date" column="date" jdbcType="DATE"/>
+            <result property="height" column="height" jdbcType="DECIMAL"/>
+            <result property="weight" column="weight" jdbcType="DECIMAL"/>
+            <result property="systolicBP" column="systolic_BP" jdbcType="INTEGER"/>
+            <result property="diastolicBP" column="diastolic_BP" jdbcType="INTEGER"/>
+            <result property="heartRate" column="heart_rate" jdbcType="INTEGER"/>
+            <result property="temperature" column="temperature" jdbcType="DECIMAL"/>
+            <result property="WBC" column="WBC" jdbcType="INTEGER"/>
+            <result property="RBC" column="RBC" jdbcType="INTEGER"/>
+            <result property="HGB" column="HGB" jdbcType="DECIMAL"/>
+            <result property="PLT" column="PLT" jdbcType="INTEGER"/>
+            <result property="bloodType" column="blood_type" jdbcType="VARCHAR"/>
+            <result property="CHOL" column="CHOL" jdbcType="DECIMAL"/>
+            <result property="TG" column="TG" jdbcType="DECIMAL"/>
+            <result property="HDLC" column="HDL_C" jdbcType="DECIMAL"/>
+            <result property="LDLC" column="LDL_C" jdbcType="DECIMAL"/>
+            <result property="GLU" column="GLU" jdbcType="DECIMAL"/>
+            <result property="ALT" column="ALT" jdbcType="DECIMAL"/>
+            <result property="AST" column="AST" jdbcType="DECIMAL"/>
+            <result property="CREA" column="CREA" jdbcType="DECIMAL"/>
+            <result property="UREA" column="UREA" jdbcType="DECIMAL"/>
+            <result property="BUN" column="BUN" jdbcType="DECIMAL"/>
+            <result property="urineProtein" column="urine_protein" jdbcType="VARCHAR"/>
+            <result property="urineGlucose" column="urine_glucose" jdbcType="VARCHAR"/>
+            <result property="urineKetones" column="urine_ketones" jdbcType="VARCHAR"/>
+            <result property="urineOccultBlood" column="urine_occult_blood" jdbcType="VARCHAR"/>
+            <result property="urineWBC" column="urine_WBC" jdbcType="VARCHAR"/>
+            <result property="chestXRay" column="chest_x_ray" jdbcType="VARCHAR"/>
+            <result property="ultrasound" column="ultrasound" jdbcType="VARCHAR"/>
+            <result property="ECG" column="ECG" jdbcType="VARCHAR"/>
+            <result property="heart" column="heart" jdbcType="VARCHAR"/>
+            <result property="lung" column="lung" jdbcType="VARCHAR"/>
+            <result property="abdomen" column="abdomen" jdbcType="VARCHAR"/>
+            <result property="cerebralVessels" column="cerebralVessels" jdbcType="VARCHAR"/>
+            <result property="skin" column="skin" jdbcType="VARCHAR"/>
+            <result property="lymphNodes" column="lymph_nodes" jdbcType="VARCHAR"/>
+            <result property="musculoSkeletal" column="musculo_skeletal" jdbcType="VARCHAR"/>
+            <result property="nervousSystem" column="nervous_system" jdbcType="VARCHAR"/>
+            <result property="breast" column="breast" jdbcType="VARCHAR"/>
+            <result property="papSmear" column="pap_smear" jdbcType="VARCHAR"/>
+            <result property="vision" column="vision" jdbcType="VARCHAR"/>
+            <result property="conjunctiva" column="conjunctiva" jdbcType="VARCHAR"/>
+            <result property="cornea" column="cornea" jdbcType="VARCHAR"/>
+            <result property="pupil" column="pupil" jdbcType="VARCHAR"/>
+            <result property="lens" column="lens" jdbcType="VARCHAR"/>
+            <result property="hearing" column="hearing" jdbcType="VARCHAR"/>
+            <result property="nose" column="nose" jdbcType="VARCHAR"/>
+            <result property="throat" column="throat" jdbcType="VARCHAR"/>
+            <result property="teeth" column="teeth" jdbcType="VARCHAR"/>
+            <result property="oralMucosa" column="oralMucosa" jdbcType="VARCHAR"/>
+            <result property="examinationConclusion" column="examinationConclusion" jdbcType="VARCHAR"/>
+            <result property="healthGuidance" column="healthGuidance" jdbcType="VARCHAR"/>
+            <result property="doctorsAdvice" column="doctorsAdvice" jdbcType="VARCHAR"/>
+            <result property="nextExaminationRecommendation" column="nextExaminationRecommendation" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        report_id,name,gender,
+        age,id_card,phone,
+        address,work_place,date,
+        height,weight,systolic_BP,
+        diastolic_BP,heart_rate,temperature,
+        WBC,RBC,HGB,
+        PLT,blood_type,CHOL,
+        TG,HDL_C,LDL_C,
+        GLU,ALT,AST,
+        CREA,UREA,BUN,
+        urine_protein,urine_glucose,urine_ketones,
+        urine_occult_blood,urine_WBC,chest_x_ray,
+        ultrasound,ECG,heart,
+        lung,abdomen,cerebralVessels,
+        skin,lymph_nodes,musculo_skeletal,
+        nervous_system,breast,pap_smear,
+        vision,conjunctiva,cornea,
+        pupil,lens,hearing,
+        nose,throat,teeth,
+        oralMucosa,examinationConclusion,healthGuidance,
+        doctorsAdvice,nextExaminationRecommendation
+    </sql>
+</mapper>
