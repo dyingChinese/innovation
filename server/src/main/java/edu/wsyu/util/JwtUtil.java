@@ -8,20 +8,23 @@ import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
 import cn.hutool.jwt.signers.JWTSigner;
 import cn.hutool.jwt.signers.JWTSignerUtil;
+import edu.wsyu.entity.dto.Role;
 import edu.wsyu.entity.vo.User;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
 @Component
 @Data
-public class jwtUtil {
+public class JwtUtil {
     //
     private static final String PRIVATE_KEY = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAMn0EyXzUtDWLiwWOZ1jyFn8pCqa80042hXtuuDxQC6nanNQG0fS7nnnLILo1/I/Jb5Ogb3X3ucgYrgzaC3rxK3eUSIsemGKTIEFgBxeNg3H/H9v9ix+Of/k1Z1CP4N5O0hwblyHTjYZJfOjmiJyEfXR5WF9cBRs3/DRCIY0WgYTAgMBAAECgYAV+F6TlLAKwMePIO/YUSr9AdYePciAOydxQUaWWB3iYBuIO0vBzuRbZgHapVgbe4aF+JEhb7hJLqXEDPD60JkPG4FMaLQhbLLayqjII10za1/GYoXm4LtjjqgIw8gRWxKuOjJePo/4sTNGXUORhjx46nGdYBCLJ9Kjd2e9KvgpeQJBAPsesFrEXudckAXw4EY+YX7wB++/g964IJoXI3rEWm6Q9aisqWm7ZaXmNgp7uVwQQfu8glAe46qKwT1WrUFClR0CQQDN4MjnZBdojjkFFJkZAjB4wt4WH79/H0l9PjQIJ4SDj4CmJqDgqyxsjDNmOuE8SGuk2mxJ0VUJBxdZvxy6KxDvAkA30Rdz5WgO1vUwTN0c3+q9006ATLpb++NLPM9nD1PmdZQU/OPfG4c5e9UROXT28Kop8Tmp42PJWXQgVS7HbaxFAkBVVt4wfF7vqjSclIM5yJyLEku45AQfD7sIvWYYEzlsx2lOdiituIa7oAoWUEXZFTP5q8jDeJBFI7lcLEoeKYflAkEAz/Q8tBgQWAymL4o/Xo14/IfXX2zhqRrXGYLIxcrQtzj4bAq6AXCTby1PKlcmOJW+IX9DHQ31wc1df3VTsnXw5A==";
     private static final String PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDJ9BMl81LQ1i4sFjmdY8hZ/KQqmvNNONoV7brg8UAup2pzUBtH0u555yyC6NfyPyW+ToG9197nIGK4M2gt68St3lEiLHphikyBBYAcXjYNx/x/b/Ysfjn/5NWdQj+DeTtIcG5ch042GSXzo5oichH10eVhfXAUbN/w0QiGNFoGEwIDAQAB";
@@ -39,7 +42,6 @@ public class jwtUtil {
     private static final JWTSigner signer = JWTSignerUtil.rs256(rsa.getPrivateKey());
 
     private static final JWTSigner verifier = JWTSignerUtil.rs256(rsa.getPublicKey());
-
 
 
 //    private RSAPrivateKey getPrivateKey() throws InvalidKeySpecException {
@@ -96,5 +98,34 @@ public class jwtUtil {
         log.info("根据token获取原始内容：{}", payloads);
         return payloads;
     }
+
+
+    public static String convertToken(String headToken) {
+        if (headToken == null || headToken.isBlank() || !headToken.startsWith("Bearer ")
+                || headToken.startsWith("Bearer null")
+        ) return null;
+        return headToken.substring(7);
+    }
+
+    public static User verifyAndGetUser(String headerToken) {
+        if (headerToken == null) return null;
+        // "Bearer " + token
+        String token = JwtUtil.convertToken(headerToken);
+        // token为空或者校验失败
+        if (token == null || !JwtUtil.validate(token)) return null;
+        JSONObject jsonObject = JwtUtil.getJSONObject(token);
+        User user = new User();
+        user.setUid(jsonObject.getLong("uid"));
+        user.setUsername(jsonObject.getStr("username"));
+        user.setName(jsonObject.getStr("name"));
+        user.setIdCard(jsonObject.getStr("idCard"));
+        user.setEmail(jsonObject.getStr("email"));
+        user.setAvatar(jsonObject.getStr("avatar"));
+        user.setAddress(jsonObject.getStr("address"));
+        user.setDescText(jsonObject.getStr("descText"));
+        user.setRolesList(List.of(jsonObject.get("roles", Role[].class)));
+        return user;
+    }
+
 
 }

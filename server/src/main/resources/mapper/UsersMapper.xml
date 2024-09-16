@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.wsyu.mapper.UsersMapper">
 
-    <resultMap id="RoleResultMap" type="edu.wsyu.entity.dto.Role">
+    <resultMap id="RoleResultMap" type="Role">
         <id property="rid" column="rid" jdbcType="BIGINT"/>
         <result property="name" column="name" jdbcType="VARCHAR"/>
         <result property="description" column="description" jdbcType="VARCHAR"/>
@@ -20,11 +20,11 @@
         <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
         <result property="address" column="address" jdbcType="VARCHAR"/>
         <result property="descText" column="desc_text" jdbcType="VARCHAR"/>
-        <result property="locked" column="locked" jdbcType="TINYINT"/>
-        <result property="enable" column="enable" jdbcType="TINYINT"/>
+        <result property="locked" column="locked" jdbcType="TINYINT" javaType="Boolean"/>
+        <result property="enable" column="enable" jdbcType="TINYINT" javaType="Boolean"/>
         <result property="createAt" column="create_at" jdbcType="TIMESTAMP"/>
         <result property="updateAt" column="update_at" jdbcType="TIMESTAMP"/>
-        <collection property="rolesList" column="uid" ofType="edu.wsyu.entity.dto.Role" select="selectRolesByUID">
+        <collection property="rolesList" column="uid" ofType="Role" select="selectRolesByUID">
             <id property="rid" column="rid" jdbcType="BIGINT"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="description" column="description" jdbcType="VARCHAR"/>
@@ -32,11 +32,17 @@
     </resultMap>
 
 
+    <select id="findUserByUID" parameterType="long" resultMap="BaseResultMap">
+        SELECT *
+        FROM users
+        WHERE uid = #{uid}
+    </select>
 
     <select id="selectRolesByUID" parameterType="long" resultMap="RoleResultMap">
         SELECT r.rid, r.name, r.description
         FROM role r
                  JOIN user_roles ur ON r.rid = ur.role_id
+        WHERE ur.user_id = #{uid}
     </select>
 
     <sql id="Base_Column_List">

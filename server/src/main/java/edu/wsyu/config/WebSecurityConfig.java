@@ -3,9 +3,10 @@ package edu.wsyu.config;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import edu.wsyu.entity.dto.Role;
 import edu.wsyu.entity.vo.AuthorizerVO;
+import edu.wsyu.filter.JwtAuthenticationFilter;
 import edu.wsyu.service.UserService;
 import edu.wsyu.util.Result;
-import edu.wsyu.util.jwtUtil;
+import edu.wsyu.util.JwtUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,75 +15,83 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 @Configuration
 @Slf4j
 public class WebSecurityConfig {
     private final UserService userService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public WebSecurityConfig(UserService userService) {
+    public WebSecurityConfig(UserService userService, JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.userService = userService;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
-//    @Bean
-//    public SecurityFilterChain webFilterChain(HttpSecurity http) throws Exception {
-//        //@format:pff
-//        http
-//
-//                .authorizeHttpRequests(auth -> {
-//                    auth.requestMatchers("/admin/**").hasRole("ADMIN")
-//                            .requestMatchers("/student/**").hasRole("STUDENT")
-//                            .requestMatchers("/teacher/**").hasRole("TEACHER")
-//                            .requestMatchers("/**").permitAll()
-//                            .requestMatchers("/static/**").permitAll()
-//                            .requestMatchers("/public/**").permitAll()
-//                            .requestMatchers("/login", "/register").permitAll()
-//                            .anyRequest().authenticated();
-//                })
-//                .formLogin(login -> {
-//                    login.loginProcessingUrl("/login")
-//                            .usernameParameter("username")
-//                            .passwordParameter("password")
-//                            .successHandler(this::onAuthenticationSuccess)
-//                            .failureHandler(this::onAuthenticationFailure);
-//
-//                })
-//                .logout(logout -> {
-//                    logout.logoutUrl("/logout").logoutSuccessHandler(this::onLogoutSuccess);
-//                })
-//                .rememberMe(remember -> {
-//
-//                })
-//                .exceptionHandling(exception -> {
-//                    exception.authenticationEntryPoint(this::commence)
-//                            .accessDeniedHandler(this::handle);
-//                })
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .cors(AbstractHttpConfigurer::disable)
-////                    session 无状态
-//                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-////                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-//
-//        //@format:on
-//        return http.build();
-//    }
+    @Bean
+    public SecurityFilterChain webFilterChain(HttpSecurity http) throws Exception {
+        //@format:pff
+        http
+
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/admin/**").hasRole("ADMIN")
+                            .requestMatchers("/student/**").hasRole("STUDENT")
+                            .requestMatchers("/teacher/**").hasRole("TEACHER")
+                            .requestMatchers("/**").permitAll()
+                            .requestMatchers("/static/**").permitAll()
+                            .requestMatchers("/public/**").permitAll()
+                            .requestMatchers("/login", "/register").permitAll()
+                            .anyRequest().authenticated();
+                })
+                .formLogin(login -> {
+                    login.loginProcessingUrl("/login")
+                            .usernameParameter("username")
+                            .passwordParameter("password")
+                            .successHandler(this::onAuthenticationSuccess)
+                            .failureHandler(this::onAuthenticationFailure);
+
+                })
+                .logout(logout -> {
+                    logout.logoutUrl("/logout").logoutSuccessHandler(this::onLogoutSuccess);
+                })
+                .rememberMe(remember -> {
+
+                })
+                .exceptionHandling(exception -> {
+                    exception.authenticationEntryPoint(this::commence)
+                            .accessDeniedHandler(this::handle);
+                })
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
+//                    session 无状态
+                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        //@format:on
+        return http.build();
+    }
 
     /**
-     * @desc onAuthenticationSuccess
      * @param request
      * @param response
      * @param authentication
      * @throws IOException
+     * @desc onAuthenticationSuccess
      */
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         response.setContentType("application/json");
@@ -92,9 +101,9 @@ public class WebSecurityConfig {
 
         edu.wsyu.entity.vo.User one = userService.findUser(new QueryWrapper<edu.wsyu.entity.vo.User>().eq("username", user.getUsername()));
 
-        String token = jwtUtil.createToken(one);
+        String token = JwtUtil.createToken(one);
         List<String> roles = new ArrayList<>();
-        for (Role role : one.getRoles()) {
+        for (Role role : one.getRolesList()) {
             roles.add(role.getName());
         }
         HttpSession session = request.getSession();
@@ -134,7 +143,7 @@ public class WebSecurityConfig {
         PrintWriter writer = response.getWriter();
 
 
-        if (jwtUtil.validate(authorization)) {
+        if (JwtUtil.validate(authorization)) {
             writer.write(Result.succeed("退出登录成功").toJSONStringify());
         } else {
             log.error("退出登录失败, userid = {}", request.getSession().getAttribute("USER_ID"));
@@ -172,9 +181,9 @@ public class WebSecurityConfig {
     }
 
 
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
 }

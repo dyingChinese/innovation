@@ -4,19 +4,21 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
-import java.io.Serial;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.servlet.annotation.HandlesTypes;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.apache.ibatis.annotations.Many;
+import mybatis.mate.annotation.FieldSensitive;
+import mybatis.mate.strategy.SensitiveType;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 用户表
@@ -53,18 +55,21 @@ public class Users implements Serializable {
      * 密码
      */
     @TableField(value = "password")
+    @FieldSensitive(SensitiveType.password)
     private String password;
 
     /**
      * 身份证号
      */
     @TableField(value = "id_card")
+    @FieldSensitive(SensitiveType.idCard)
     private String idCard;
 
     /**
      * 电子邮件
      */
     @TableField(value = "email")
+    @FieldSensitive(SensitiveType.email)
     private String email;
 
 
@@ -78,6 +83,7 @@ public class Users implements Serializable {
      * 地址
      */
     @TableField(value = "address")
+    @FieldSensitive(SensitiveType.address)
     private String address;
 
     /**
@@ -90,30 +96,34 @@ public class Users implements Serializable {
      * 是否封禁
      */
     @TableField(value = "locked")
-    private Integer locked;
+    private Boolean locked;
 
     /**
      * 是否启用
      */
     @TableField(value = "enable")
-    private Integer enable;
+    @JsonIgnore
+    private Boolean enable;
 
     /**
      * 创建时间
      */
     @TableField(value = "create_at")
-    private Date createAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private LocalDateTime createAt;
 
     /**
      * 更新时间
      */
     @TableField(value = "update_at")
-    private Date updateAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonIgnore
+    private LocalDateTime updateAt;
 
     /**
      * 角色
      */
-    @TableField(exist = false)
+    @TableField(exist = false, typeHandler = JacksonTypeHandler.class)
     private List<Role> rolesList;
 
     @Serial

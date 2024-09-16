@@ -29,32 +29,28 @@ import java.util.List;
 public class User extends Users implements UserDetails, Serializable {
 
 
-    private List<Role> roles;
-
     @Serial
     private static final long serialVersionUID = -6204823218194972456L;
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.roles == null) {
-//            roleMapper.().forEach(role -> {
-//                if (role.getUserId().equals(this.getId())) {
-//                    roles.add(role);
-//                }
-//            }                                          );
-//            this.roles = roleMapper.selectList(new QueryWrapper<Role>().eq("user_id", this.getUid()));
-        } ;
+        if (this.getRolesList() == null) {
+//            this.setRolesList(roleMapper.selectList(new QueryWrapper<Role>().eq("user_id", this.getUid())));
+            this.setRolesList(new ArrayList<>());
+        }
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for (Role role : this.roles) {
+        for (Role role : this.getRolesList()) {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         }
         return authorities;
     }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
 
+    // 基于Users实例的构造函数
+    public User(Users users) {
+        // 这里我们假设Users类有一个无参构造函数或者有相应的getter方法
+        // 我们使用Users实例的字段来初始化User实例的字段
+        super(users.getUid(), users.getUsername(), users.getName(), users.getPassword(), users.getIdCard(), users.getEmail(), users.getAvatar(), users.getAddress(), users.getDescText(), users.getLocked(), users.getEnable(), users.getCreateAt(), users.getUpdateAt(), users.getRolesList());
+    }
 }

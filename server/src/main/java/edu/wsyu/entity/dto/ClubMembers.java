@@ -4,11 +4,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
-import lombok.Data;
+import java.time.LocalDate;
 
 /**
  * 社团成员表
@@ -51,13 +52,15 @@ public class ClubMembers implements Serializable {
      * 加入日期
      */
     @TableField(value = "join_date")
-    private Date joinDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private LocalDate joinDate;
 
     /**
      * 退出日期
      */
     @TableField(value = "end_date")
-    private Date endDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private LocalDate endDate;
 
     @Serial
     @TableField(exist = false)

@@ -4,11 +4,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
-import lombok.Data;
+import java.time.LocalDate;
 
 /**
  * 学生表
@@ -45,7 +46,8 @@ public class Students implements Serializable {
      * 入学日期
      */
     @TableField(value = "admission_date")
-    private Date admissionDate;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    private LocalDate admissionDate;
 
     /**
      * 学生状态 0:在读 1:休学 2:退学 3:毕业 4:其他

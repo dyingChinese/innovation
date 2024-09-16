@@ -4,17 +4,19 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
-import lombok.Data;
+import java.time.LocalDateTime;
 
 /**
  * 事件表
+ *
  * @TableName events
  */
-@TableName(value ="events")
+@TableName(value = "events")
 @Data
 public class Events implements Serializable {
     /**
@@ -39,13 +41,15 @@ public class Events implements Serializable {
      * 开始时间
      */
     @TableField(value = "start_time")
-    private Date startTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private LocalDateTime startTime;
 
     /**
      * 结束时间
      */
     @TableField(value = "end_time")
-    private Date endTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private LocalDateTime endTime;
 
     /**
      * 地点
@@ -75,13 +79,14 @@ public class Events implements Serializable {
      * 创建时间
      */
     @TableField(value = "create_at")
-    private Date createAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private LocalDateTime createAt;
 
     /**
      * 更新时间
      */
     @TableField(value = "update_at")
-    private Date updateAt;
+    private LocalDateTime updateAt;
 
     @Serial
     @TableField(exist = false)

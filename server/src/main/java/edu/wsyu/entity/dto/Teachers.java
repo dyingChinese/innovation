@@ -4,11 +4,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
-import lombok.Data;
+import java.time.LocalDate;
 
 /**
  * 教师表
@@ -51,7 +52,8 @@ public class Teachers implements Serializable {
      * 入职日期
      */
     @TableField(value = "hire_date")
-    private Date hireDate;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    private LocalDate hireDate;
 
     /**
      * 教师状态 0:在职 1:离职 2:退休 3:其他
