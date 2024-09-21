@@ -14,8 +14,8 @@
         <el-footer ref="footerRef">
           <router-view name="globalLayoutFooter"/>
         </el-footer>
-        {{ 'height ' + windowStore.window.windowHeight }}
-        {{ 'width ' + windowStore.window.windowWidth }}
+        {{ windowStore.window.windowHeight }}
+        {{ windowStore.window.windowWidth }}
         {{ windowStore.window.layout }}
       </el-container>
     </el-container>
@@ -79,7 +79,6 @@ useResizeObserver(footerRef, (entries) => {
 }
 
 :deep(.el-aside) {
-  min-height: 100vh;
-  height: auto;
+  height: 100vh;
 }
 </style>

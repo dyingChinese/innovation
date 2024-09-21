@@ -30,11 +30,11 @@ public interface UserService extends UsersService {
     /**
      * 查询用户列表
      *
-     * @param currentPage  当前页
+     * @param pageNum  当前页
      * @param pageSize 每页显示条数
      * @return 用户列表
      */
-    IPage<User> selectPageUserList(Integer currentPage, Integer pageSize);
+    IPage<User> selectUserList(Integer pageNum, Integer pageSize);
 
     /**
      * 根据用户ID查询用户信息
@@ -45,6 +45,4 @@ public interface UserService extends UsersService {
     User findUserByUID(Long uid);
 
     User findUser(QueryWrapper<User> username);
-
-
 }

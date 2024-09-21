@@ -45,13 +45,6 @@
         WHERE ur.user_id = #{uid}
     </select>
 
-    <select id="findUserRoleListByUID" resultMap="RoleResultMap">
-        SELECT r.rid, r.name, r.description
-        FROM role r
-                 JOIN user_roles ur ON r.rid = ur.role_id
-        WHERE ur.user_id = #{uid}
-    </select>
-
     <sql id="Base_Column_List">
         uid,username,name,
         password,id_card,email,
