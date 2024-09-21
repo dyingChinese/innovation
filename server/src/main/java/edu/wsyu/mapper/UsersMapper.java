@@ -22,6 +22,7 @@ public interface UsersMapper extends BaseMapper<Users> {
 
     List<Users> selectRolesByUID(@Param("uid") Long uid);
 
+    List<Users> findUserRoleListByUID(@Param("uid") Long uid);
 }
 
 

@@ -1,5 +1,8 @@
 <template>
-
+  <el-divider>
+    footer
+  </el-divider>
+  footer
 </template>
 
 
